@@ -1,23 +1,20 @@
 import type { Program } from '../../domain/programs/Program.js';
-import {
-  buildProgressBar,
-  calculateProgressPercent,
-  getProgramIndicator,
-} from '../../domain/programs/programProgress.js';
+import { getProgramIndicator } from '../../domain/programs/programProgress.js';
 
 export type ProgramButton = {
+  type: 'callback';
   text: string;
-  callbackData: string;
+  payload: string;
 };
 
 function buildProgramButton(program: Program): ProgramButton {
   const indicator = getProgramIndicator(program);
-  const progressBar = buildProgressBar(program);
-  const percent = calculateProgressPercent(program);
+
 
   return {
-    text: `${indicator} ${program.title} · ${program.enrolledCount}/${program.capacity} · ${progressBar} ${percent}%`,
-    callbackData: `program:${program.id}`,
+    type: 'callback',
+    text: `${indicator} ${program.title} · ${program.enrolledCount}/${program.capacity} `,
+    payload: `program:${program.id}`,
   };
 }
 
@@ -37,8 +34,9 @@ export function buildProgramsKeyboard(
   if (sportPrograms.length > 0) {
     rows.push([
       {
+        type: 'callback',
         text: '🏃 СПОРТИВНЫЕ СЕКЦИИ',
-        callbackData: 'category:sport',
+        payload: 'category:sport',
       },
     ]);
 
@@ -50,8 +48,9 @@ export function buildProgramsKeyboard(
   if (otherPrograms.length > 0) {
     rows.push([
       {
+        type: 'callback',
         text: '🎨 ОСТАЛЬНЫЕ НАПРАВЛЕНИЯ',
-        callbackData: 'category:other',
+        payload: 'category:other',
       },
     ]);
 
